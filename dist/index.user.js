@@ -5,7 +5,7 @@
 // @description Use Story Points in GitHub Projects.
 // @match       https://github.com/*/projects/*
 // @run-at      document-end
-// @version     1.0.0
+// @version     0.1.0
 // @author      Emilio B. Pedrollo
 // @website     https://github.com/emiliopedrollo/ghubscore/
 // @require     https://cdn.jsdelivr.net/combine/npm/@violentmonkey/dom@1,npm/@violentmonkey/ui@0.5
