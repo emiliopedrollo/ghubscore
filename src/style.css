@@ -1,0 +1,32 @@
+.ghp-estimate {
+  /*noinspection CssUnresolvedCustomProperty*/
+  border-color: var(--color-border-tertiary);
+  border-width: 2px;
+  border-style: solid;
+  padding: 3px .3em 0;
+  border-radius: 40% 0/15% 15%;
+  position: relative;
+  display: inline-block;
+  text-align: center;
+  line-height: 1.1em;
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+.ghp-card-estimate {
+  /*noinspection CssUnresolvedCustomProperty*/
+  color: var(--color-fg-muted);
+}
+
+.js-project-card-issue-link .ghp-card-estimate {
+  margin-top: -2px;
+}
+
+.ghp-column-estimate {
+  /*noinspection CssUnresolvedCustomProperty*/
+  color: var(--color-fg-default);
+}
+
+.ghp-project-estimate {
+
+}

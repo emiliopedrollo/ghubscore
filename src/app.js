@@ -1,0 +1,74 @@
+const getColumns = (kanban) => {
+  return [...(kanban.querySelectorAll('.project-column'))].map((column) => {
+    const cards = getCards(column);
+    const estimate = cards.map(card => card.points).reduce((a, b) => a + b, 0);
+    const title = column.querySelector('.details-container .js-project-column-name');
+
+    if (!column.dataset.original) {
+      column.dataset.original = title.innerHTML;
+    }
+
+    if ((column.dataset.estimate !== estimate.toString()) || !column.dataset.touched) {
+      column.dataset.estimate = estimate.toString();
+      column.dataset.touched = true;
+      title.innerHTML = `${column.dataset.original} <span class="ghp-estimate ghp-column-estimate">${estimate}</span>`;
+    }
+
+    const type = column.querySelector('.js-project-column-automation-summary').innerText.trim();
+
+    return {
+      node: column,
+      title: title.innerText,
+      points: estimate,
+      cards,
+      type,
+    };
+  });
+};
+
+const getCards = (column) => {
+  return [...(column.querySelectorAll('article.project-card'))].map((card) => {
+    const note = card.querySelector('.js-task-list-container .js-comment-body p');
+    const issue = card.querySelector('.js-project-card-issue-link');
+    return {
+      node: card,
+      points: getEstimateFromNode(note || issue),
+    };
+  });
+};
+
+const getEstimateFromNode = (node) => {
+  const match = node.innerText.match(/^\[(\d+)]/);
+
+  if (match) {
+    const estimate = parseInt(match[1], 10) || 0;
+
+    if (node.dataset.estimate !== estimate.toString(10)) {
+      node.dataset.estimate = estimate.toString(10);
+      const content = node.innerHTML.replace(/^\[\d+]\s+/, '');
+      node.innerHTML = `<span class="ghp-estimate ghp-card-estimate">${estimate}</span> ${content}`;
+    }
+    return estimate;
+  }
+
+  return parseInt(node.dataset.estimate, 10) || 0;
+};
+
+export const transform = (kanban) => {
+  const columns = getColumns(kanban);
+  const estimate = columns
+    .map(column => column.points)
+    .reduce((a, b) => a + b, 0);
+
+  const project = kanban.querySelector('.js-project-name-label');
+
+  if (!project.dataset.name) {
+    project.dataset.name = project.innerText;
+  }
+
+  if ((project.dataset.estimate !== estimate.toString()) || !project.dataset.touched) {
+    project.dataset.estimate = estimate.toString();
+    project.dataset.touched = true;
+    project.innerHTML = `${project.dataset.name} <span class="ghp-estimate ghp-project-estimate">${estimate}</span>`;
+  }
+};
